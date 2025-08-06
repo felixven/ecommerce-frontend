@@ -1,8 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: `${import.meta.env.VITE_BACK_END_URL}/api`,
-    withCredentials: true,
+  baseURL: `${import.meta.env.VITE_BACK_END_URL}/api`,
+  //不需要 cookie所以這行可以拿掉
+  // withCredentials: true,
 });
 
 api.interceptors.request.use(
