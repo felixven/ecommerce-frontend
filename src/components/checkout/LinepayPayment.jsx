@@ -47,8 +47,8 @@ localStorage.setItem("LINEPAY_TOTAL_AMOUNT", totalPrice);
         currency: "TWD",
         orderId: orderId,
         productName: "Your Order",
-        confirmUrl: "http://localhost:5173/linepay/confirm",
-        cancelUrl: "http://localhost:5173/linepay/cancel",
+        confirmUrl: `${import.meta.env.VITE_FRONT_END_URL}/linepay/confirm`,
+        cancelUrl: `${import.meta.env.VITE_FRONT_END_URL}/linepay/cancel`,
       };
 
       const reserveRes = await api.post("/order/linepay-reserve", reserveBody);
