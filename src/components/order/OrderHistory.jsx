@@ -4,6 +4,7 @@ import OrderViewModal from "./OrderViewModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserOrders } from "../../store/actions";
 import { Navigate} from 'react-router-dom';
+import {displayOrderStatus} from "../../utils/orderStatus"
 
 const OrderHistory = () => {
   const dispatch = useDispatch();
@@ -42,7 +43,7 @@ const OrderHistory = () => {
           </p>
           <p className="text-sm text-gray-600">
             狀態：
-            <span className="text-green-600 font-medium">{order.orderStatus}</span>
+            <span className="text-green-600 font-medium">{displayOrderStatus(order.orderStatus)}</span>
           </p>
         </div>
       ))}

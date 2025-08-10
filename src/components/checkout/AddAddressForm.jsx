@@ -172,7 +172,7 @@ const AddAddressForm = ({ address, setOpenAddressModal }) => {
                     type="submit">
                     {btnLoader ? (
                         <>
-                            <Spinners /> Loading...
+                            <Spinners /> 請稍後...
                         </>
                     ) : (
                         <> 儲存</>

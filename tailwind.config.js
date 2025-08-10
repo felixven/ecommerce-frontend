@@ -13,7 +13,7 @@ export default {
       colors: {
         customBlue: "rgba(28, 100, 242, 1)",
         banner: {
-          color1: "#FDC200",
+          color1: "#FDC200",//這四色都是banner那邊有結果 但不確定顯示上有沒有真的用到
           color2: "#FF2C2C",
           color3: "#21AD61",
           color4: "#723DA6",
@@ -21,8 +21,8 @@ export default {
       },
       backgroundImage: {
        "custom-gradient": "linear-gradient(to right, #FDE6C9, #FBD7A1)", // 奶茶漸層（舉例）
-        "button-gradient": "linear-gradient(to right, #7e22ce, #ef4444)",
-        "custom-gradient2": "linear-gradient(135deg, #f5f5f5, #eae7dc)",
+        "button-gradient": "linear-gradient(to right, #7e22ce, #ef4444)",//無結果
+        "custom-gradient2": "linear-gradient(135deg, #f5f5f5, #eae7dc)",//無結果
       },
     },
   },

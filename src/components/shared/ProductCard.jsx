@@ -95,16 +95,16 @@ const ProductCard = ({
                     {specialPrice ? (
                         <div className="flex flex-col">
                             <span className="text-gray-400 line-through">
-                                ${Number(price).toFixed(2)}
+                                NT${Number(price).toFixed(0)}
                             </span>
                             <span className="text-xl font-bold text-slate-700">
-                                ${Number(specialPrice).toFixed(2)}
+                                NT${Number(specialPrice).toFixed(0)}
                             </span>
                         </div>
                     ) : (
                         <span className="text-xl font-bold text-slate-700">
                             {" "}
-                            ${Number(price).toFixed(2)}
+                            NT${Number(price).toFixed(0)}
                         </span>
                     )}
 

@@ -63,7 +63,7 @@ export const DeleteModal = ({
                   onClick={onDeleteHandler}
                 className="inline-flex w-full bg-customRed justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
               >
-                {loader ? "Loading..." : "刪除"}
+                {loader ? "請稍後..." : "刪除"}
               </button>
               <button
                 disabled={loader}

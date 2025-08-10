@@ -69,7 +69,7 @@ const LogIn = () => {
   {loader ? (
     <>
       <Spinners />
-      Loading...
+      請稍後...
     </>
   ) : (
     <> 登入 </>

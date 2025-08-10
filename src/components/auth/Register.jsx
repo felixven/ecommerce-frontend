@@ -81,7 +81,7 @@ const Register = () => {
                     {loader ? (
                         <>
                             <Spinners/>
-                            Loading...
+                            請稍後...
                         </>
                     ) : (
                         <> 註冊</>

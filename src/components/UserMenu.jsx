@@ -52,6 +52,7 @@ export const UserMenu = () => {
                 MenuListProps={{
                     'aria-labelledby': 'basic-button',
                     sx: { width: 160 },
+                    onClick: handleClose,
                 }}
             >
                 <Link to="/profile">

@@ -2,7 +2,7 @@ import ProductCard from "./shared/ProductCard";
 
 const products = [
     {
-        image: "https://embarkx.com/sample/placeholder.png",
+        image: "https://res.cloudinary.com/drbhr7kmb/image/upload/v1754286944/default_o4fznm.png",
         productName: "iPhone 13 Pro Max",
         description:
             "The iPhone 13 Pro Max offers exceptional performance with its A15 Bionic chip, stunning Super Retina XDR display, and advanced camera features for breathtaking photos.",
@@ -10,7 +10,7 @@ const products = [
         price: 780,
     },
     {
-        image: "https://embarkx.com/sample/placeholder.png",
+        image: "https://res.cloudinary.com/drbhr7kmb/image/upload/v1754286944/default_o4fznm.png",
         productName: "Samsung Galaxy S21",
         description:
             "Experience the brilliance of the Samsung Galaxy S21 with its vibrant AMOLED display, powerful camera, and sleek design that fits perfectly in your hand.",
@@ -18,7 +18,7 @@ const products = [
         price: 799,
     },
     {
-        image: "https://embarkx.com/sample/placeholder.png",
+        image: "https://res.cloudinary.com/drbhr7kmb/image/upload/v1754286944/default_o4fznm.png",
         productName: "Google Pixel 6",
         description:
             "The Google Pixel 6 boasts cutting-edge AI features, exceptional photo quality, and a stunning display, making it a perfect choice for Android enthusiasts.",
@@ -49,7 +49,7 @@ const About = () => {
                 </div>
 
                 <div className="w-full md:w-1/2 mb-6 md:mb-0">
-                    <img src="https://embarkx.com/sample/placeholder.png"
+                    <img src="https://res.cloudinary.com/drbhr7kmb/image/upload/v1754286944/default_o4fznm.png"
                         alt="About Us"
                         className="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
                     </img>

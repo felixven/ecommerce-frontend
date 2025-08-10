@@ -21,7 +21,7 @@ export const fetchProducts = (queryString) => async (dispatch) => {
         console.log(error);
         dispatch({
             type: "IS_ERROR",
-            payload: error?.response?.data?.message || "Failed to fetch products",
+            payload: error?.response?.data?.message || "無法讀取商品",
         });
     }
 };
@@ -44,7 +44,7 @@ export const fetchCategories = (queryString) => async (dispatch) => {
         console.log(error);
         dispatch({
             type: "IS_ERROR",
-            payload: error?.response?.data?.message || "Failed to fetch categories",
+            payload: error?.response?.data?.message || "無法讀取商品類型",
         });
     }
 };
@@ -131,7 +131,7 @@ export const authenticateSignInUser
             navigate("/");
         } catch (error) {
             console.log(error);
-            toast.error(error?.response?.data?.message || "Internal Server Error");
+            toast.error(error?.response?.data?.message || "系統異常，請稍後重試");
         } finally {
             setLoader(false);
         }
@@ -147,7 +147,7 @@ export const registerNewUser
             navigate("/login");
         } catch (error) {
             console.log(error);
-            toast.error(error?.response?.data?.message || error?.response?.data?.password || "Internal Server Error");
+            toast.error(error?.response?.data?.message || error?.response?.data?.password || "系統異常，請稍後重試");
         } finally {
             setLoader(false);
         }
@@ -175,7 +175,7 @@ export const addUpdateUserAddress =
             dispatch({ type: "IS_SUCCESS" });
         } catch (error) {
             console.log(error);
-            toast.error(error?.response?.data?.message || "Internal Server Error");
+            toast.error(error?.response?.data?.message || "系統異常，請稍後重試");
             dispatch({ type: "IS_ERROR", payload: null });
         } finally {
             setOpenAddressModal(false);
@@ -279,11 +279,19 @@ export const getUserCart = () => async (dispatch, getState) => {
 
 export const createStripePaymentSecret
     = (totalPrice) => async (dispatch, getState) => {
+        // try {
+        //     dispatch({ type: "IS_FETCHING" });
+        //     const { data } = await api.post("/order/stripe-client-secret", {
+        //         "amount": Number(totalPrice) * 100,
+        //         "currency": "usd"
+        //     });
         try {
             dispatch({ type: "IS_FETCHING" });
+            const amountInCents = Math.round(Number(totalPrice) * 100); // 元→分，四捨五入保險
+
             const { data } = await api.post("/order/stripe-client-secret", {
-                "amount": Number(totalPrice) * 100,
-                "currency": "usd"
+                amount: amountInCents,   // 例如 NT$300 => 30000
+                currency: "twd",         // ✅ 改成台幣
             });
             dispatch({ type: "CLIENT_SECRET", payload: data });
             localStorage.setItem("client-secret", JSON.stringify(data));

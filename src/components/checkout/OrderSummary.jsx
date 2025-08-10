@@ -83,7 +83,7 @@ const OrderSummary = ({ totalPrice, cart, address, paymentMethod }) => {
                             </div>
                             <div className="flex justify-between">
                                 <span>運費</span>
-                                <span>$0.00</span>
+                                <span>$0</span>
                             </div>
                             <div className="flex justify-between font-semibold">
                                 <span>總金額</span>
