@@ -1,6 +1,6 @@
 import { FaShoppingCart, FaSignInAlt, FaStore } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Badge } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RxCross2 } from "react-icons/rx";
@@ -9,10 +9,15 @@ import { UserMenu } from "../UserMenu";
 
 
 const NavBar = () => {
-    const path = useLocation().pathname;
+    const location = useLocation();
+    const path = location.pathname;
     const [navbarOpen, setNavbarOpen] = useState(false);
     const { cart } = useSelector((state) => state.carts);
     const { user } = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        setNavbarOpen(false);     // 路由改變就收合
+    }, [location.pathname]);
 
     return (
         <div className="h-[70px] bg-custom-gradient text-black z-50 flex items-center sticky top-0">

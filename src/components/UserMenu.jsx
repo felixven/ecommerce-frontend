@@ -55,7 +55,7 @@ export const UserMenu = () => {
                     onClick: handleClose,
                 }}
             >
-                <Link to="/profile">
+                <Link to="/profile" onClick={handleClose}>
                     <MenuItem className="flex gap-2"
                         onClick={handleClose}>
                         <BiUser className='text-xl' />
