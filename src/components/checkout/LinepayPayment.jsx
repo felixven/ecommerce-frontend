@@ -8,16 +8,15 @@ import linePay from "../../assets/linepay.webp";
 
 const LinepayPayment = () => {
   const dispatch = useDispatch();
-  const { cart, totalPrice } = useSelector((state) => state.carts);
+  const { cart } = useSelector((state) => state.carts);
   const { selectedUserCheckoutAddress } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
 
   const handleLinePay = async () => {
-    if (!selectedUserCheckoutAddress || cart.length === 0 || !totalPrice) {
-      toast.error("Address, cart, or total price missing.");
+    if (!selectedUserCheckoutAddress || cart.length === 0) {
+      toast.error("Address or cart missing.");
       return;
     }
-
     setLoading(true);
 
     try {
@@ -25,25 +24,27 @@ const LinepayPayment = () => {
       const orderItems = cart.map((item) => ({
         product: { productId: item.productId },
         quantity: item.quantity,
-        discount: 0,
-        orderedProductPrice: item.price,
       }));
 
       const orderData = {
         addressId: selectedUserCheckoutAddress.addressId,
-        totalAmount: totalPrice,
         orderItems,
       };
 
+      // const orderRes = await api.post("/order/create-for-linepay", orderData);
+      // const orderId = orderRes.data.orderId;
+
       const orderRes = await api.post("/order/create-for-linepay", orderData);
-      const orderId = orderRes.data.orderId;
+      const order = orderRes.data;
+      const orderId = order.orderId;
+      const amountFromServer = order.totalAmount;
 
       localStorage.setItem("LINEPAY_ORDER_ID", orderId); // 👈 確保是純數字
-localStorage.setItem("LINEPAY_TOTAL_AMOUNT", totalPrice);
+      localStorage.setItem("LINEPAY_TOTAL_AMOUNT", amountFromServer);
 
       // Step 2: 呼叫 Line Pay reserve
       const reserveBody = {
-        amount: totalPrice,
+        amount: amountFromServer,
         currency: "TWD",
         orderId: orderId,
         productName: "Your Order",
@@ -69,19 +70,19 @@ localStorage.setItem("LINEPAY_TOTAL_AMOUNT", totalPrice);
   };
 
   return (
-   <div className="h-96 flex justify-center items-center">
-    {loading ? (
-      <CircularProgress />
-    ) : (
-      <div className="flex flex-col items-center space-y-4">
-        <img src={linePay} alt="Line Pay" className="w-40 h-auto" />
-        <Button variant="contained" color="primary" onClick={handleLinePay}>
-          開啟 Line Pay 付款
-        </Button>
-      </div>
-    )}
-  </div>
-);
+    <div className="h-96 flex justify-center items-center">
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <div className="flex flex-col items-center space-y-4">
+          <img src={linePay} alt="Line Pay" className="w-40 h-auto" />
+          <Button variant="contained" color="primary" onClick={handleLinePay}>
+            開啟 Line Pay 付款
+          </Button>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default LinepayPayment;

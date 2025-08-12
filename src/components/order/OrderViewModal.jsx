@@ -1,5 +1,6 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import { MdClose } from "react-icons/md";
+import { displayOrderStatus } from "../../utils/orderStatus"
 
 function OrderViewModal({ open, setOpen, order }) {
   if (!order) return null;
@@ -11,6 +12,8 @@ function OrderViewModal({ open, setOpen, order }) {
     orderStatus,
     orderItems = []
   } = order;
+
+
 
   return (
     <Dialog open={open} as="div" className="relative z-10" onClose={() => setOpen(false)}>
@@ -24,14 +27,15 @@ function OrderViewModal({ open, setOpen, order }) {
 
             <p className="text-sm text-gray-600 mb-1">訂單日期：{orderDate}</p>
             <p className="text-sm text-gray-600 mb-1">總金額：${totalAmount}</p>
-            <p className="text-sm text-gray-600 mb-3">狀態：{orderStatus}</p>
+            <p className="text-sm text-gray-600 mb-3">狀態：{displayOrderStatus(order.orderStatus)}</p>
 
             <div className="border-t pt-4">
               <h3 className="text-sm font-bold mb-2">商品清單：</h3>
               <ul className="text-sm text-gray-700 list-disc ml-4">
                 {orderItems.map((item) => (
                   <li key={item.orderItemId}>
-                    {item.product.productName} × {item.quantity}（${item.orderedProductPrice}）
+                    {item.product.productName} × {item.quantity}
+                    （原價 ${item.orderedProductPrice + (item.discount || 0)}，特價 ${item.orderedProductPrice}）
                   </li>
                 ))}
               </ul>
