@@ -69,6 +69,13 @@
    ```bash
    npm run dev
    ```
+5. 搭配後端測試
+   - 請先完成安裝 [後端原始碼](https://github.com/felixven/ecommerce-backend#本機安裝與使用)。
+   - 後端 application.properties 設定：
+   ```properties
+   frontend.url=${FRONTEND_URL}
+   ```
+   - 確保前後端 API 可以正確串接。
 
 
 
