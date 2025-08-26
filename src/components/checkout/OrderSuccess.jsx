@@ -15,17 +15,17 @@ const OrderSuccess = () => {
     api.get("/users/orders").then((res) => {
       const found = res.data.find((o) => o.orderId === Number(orderId));
       setOrder(found);
-      setLoading(false); 
+      setLoading(false);
     });
   }, [orderId]);
 
   if (loading) {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="p-6 rounded border"><Loader text={"請稍後..."}/></div> 
-    </div>
-  );
-}
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader text={"請稍後..."} />
+      </div>
+    );
+  }
 
   if (!order) {
     return (
@@ -42,12 +42,12 @@ const OrderSuccess = () => {
           <BsBagCheckFill size={72} />
         </div>
         <h2 className="text-3xl font-bold text-gray-800 mb-3">付款成功!</h2>
-           <p className="text-gray-600 leading-relaxed mb-6">
-      感謝您的訂購！<br />
-      訂單號碼：<span className="font-semibold">{order.orderId}</span><br />
-      金額：<span className="font-semibold">{order.totalAmount} 元</span><br />
-      狀態：<span className="font-semibold">{displayOrderStatus(order.orderStatus)}</span>
-    </p>
+        <p className="text-gray-600 leading-relaxed mb-6">
+          感謝您的訂購！<br />
+          訂單號碼：<span className="font-semibold">{order.orderId}</span><br />
+          金額：<span className="font-semibold">{order.totalAmount} 元</span><br />
+          狀態：<span className="font-semibold">{displayOrderStatus(order.orderStatus)}</span>
+        </p>
         <div className="mt-6 flex gap-4 justify-center">
           <Link
             to="/orders"
