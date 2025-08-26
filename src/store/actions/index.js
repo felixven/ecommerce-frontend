@@ -1,5 +1,7 @@
 import toast from "react-hot-toast";
-import api from "../../api/api"; 
+import api from "../../api/api";
+import React from "react";
+import { Link } from "react-router-dom";
 import { Elements } from '@stripe/react-stripe-js';
 
 export const fetchProducts = (queryString) => async (dispatch) => {
@@ -67,7 +69,42 @@ export const addToCart = (data, qty = 1, toast) =>
                 type: "ADD_CART",
                 payload: { ...data, quantity: qty }
             });
-            toast.success(`${data?.productName} 已加入購物車`);
+            toast.success(
+                React.createElement(
+                    "div",
+                    {
+                        style: {
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            whiteSpace: "nowrap" 
+                        }
+                    },
+                    `${data?.productName} 已加入購物車`,
+                    React.createElement(
+                        "a",
+                        {
+                            href: "/cart",
+                            style: {
+                                textDecoration: "underline",
+                                fontWeight: "500",
+                                whiteSpace: "nowrap"
+                            },
+                            onClick: (e) => {
+                                e.preventDefault();
+                                window.location.href = "/cart";
+                            }
+                        },
+                        "立即結帳"
+                    )
+                ),
+                {
+                    autoClose: 8000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                }
+            );
+
             localStorage.setItem("cartItems", JSON.stringify(getState().carts.cart));
         } else {
             //if not -> error
@@ -292,7 +329,7 @@ export const createStripePaymentSecret
 
             const { data } = await api.post("/order/stripe-client-secret", {
                 amount: amountInCents,   // 例如 NT$300 => 30000
-                currency: "twd",         // ✅ 改成台幣
+                currency: "twd", 
             });
             dispatch({ type: "CLIENT_SECRET", payload: data });
             localStorage.setItem("client-secret", JSON.stringify(data));

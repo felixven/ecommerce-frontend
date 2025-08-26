@@ -10,26 +10,26 @@ import { formatPrice } from "../../utils/formatPrice";
 const Cart = () => {
     const dispatch = useDispatch();
     const { cart } = useSelector((state) => state.carts);
-    const { products } = useSelector((state) => state.products); 
+    const { products } = useSelector((state) => state.products);
     const newCart = { ...cart };
 
     useEffect(() => {
         if (products.length === 0) {
             dispatch(fetchProducts()); // 重新載入 products
         }
-    }, [products, dispatch]); 
+    }, [products, dispatch]);
 
     newCart.totalPrice = cart?.reduce(
         (acc, cur) => acc + Number(cur?.specialPrice) * Number(cur?.quantity), 0
     );
 
-    if (!cart || cart.length === 0) return <CartEmpty/>;
+    if (!cart || cart.length === 0) return <CartEmpty />;
 
     return (
         <div className="lg:px-14 sm:px-8 px-4 py-10">
             <div className="flex flex-col items-center mb-12">
                 <h1 className="text-4xl font-bold text-gray-900 flex items-center gap-3">
-                  <MdShoppingCart size={36} className="text-gray-700" />
+                    <MdShoppingCart size={36} className="text-gray-700" />
                     購物車
                 </h1>
                 <p className="text-lg text-gray-600 mt-2">已加入購物車的商品</p>
@@ -55,7 +55,7 @@ const Cart = () => {
 
             <div>
                 {cart && cart.length > 0 &&
-                    cart.map((item, i) => <ItemContent key={i} {...item}/>)}
+                    cart.map((item, i) => <ItemContent key={i} {...item} />)}
             </div>
 
             <div className="border-t-[1.5px] border-slate-200 py-4 flex sm:flex-row sm:px-0 px-2 flex-col sm:justify-between gap-4">
@@ -71,14 +71,14 @@ const Cart = () => {
                     </p>
 
                     <Link className="w-full flex justify-end" to="/checkout">
-                    <button
-  onClick={() => {}}
-  className="font-semibold w-[300px] py-2 px-4 rounded-sm 
+                        <button
+                            onClick={() => { }}
+                            className="font-semibold w-[300px] py-2 px-4 rounded-sm 
              bg-black text-white flex items-center justify-center gap-2 
              hover:bg-gray-800 transition duration-500">
-  <MdShoppingCart size={20} />
-  確認結帳
-</button>
+                            <MdShoppingCart size={20} />
+                            確認結帳
+                        </button>
 
                     </Link>
 
