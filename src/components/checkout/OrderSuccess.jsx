@@ -3,17 +3,29 @@ import { useParams, Link } from "react-router-dom";
 import api from '../../api/api';
 import { BsBagCheckFill } from "react-icons/bs";
 import { displayOrderStatus } from "../../utils/orderStatus"
+import Loader from "../shared/Loader";
 
 const OrderSuccess = () => {
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     api.get("/users/orders").then((res) => {
       const found = res.data.find((o) => o.orderId === Number(orderId));
       setOrder(found);
+      setLoading(false); 
     });
   }, [orderId]);
+
+  if (loading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="p-6 rounded border"><Loader text={"請稍後..."}/></div> 
+    </div>
+  );
+}
 
   if (!order) {
     return (
