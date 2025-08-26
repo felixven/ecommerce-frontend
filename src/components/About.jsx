@@ -2,28 +2,28 @@ import ProductCard from "./shared/ProductCard";
 
 const products = [
     {
-        image: "https://res.cloudinary.com/drbhr7kmb/image/upload/v1754286944/default_o4fznm.png",
-        productName: "iPhone 13 Pro Max",
+        image: "https://res.cloudinary.com/drbhr7kmb/image/upload/v1754923603/epqwckg0jyix9eglp0eu.png",
+        productName: "iPhone XE",
         description:
-            "The iPhone 13 Pro Max offers exceptional performance with its A15 Bionic chip, stunning Super Retina XDR display, and advanced camera features for breathtaking photos.",
-        specialPrice: 720,
-        price: 780,
+            "高效處理器搭配清晰螢幕，支援多種應用程式，讓生活與工作一手掌握",
+        specialPrice: 28000,
+        price: 23800,
     },
     {
-        image: "https://res.cloudinary.com/drbhr7kmb/image/upload/v1754286944/default_o4fznm.png",
-        productName: "Samsung Galaxy S21",
+        image: "https://res.cloudinary.com/drbhr7kmb/image/upload/v1754922800/qzk2pxmsl7pzdalrfe4a.png",
+        productName: "實木茶几",
         description:
-            "Experience the brilliance of the Samsung Galaxy S21 with its vibrant AMOLED display, powerful camera, and sleek design that fits perfectly in your hand.",
-        specialPrice: 699,
-        price: 799,
+            "採用天然實木打造，紋理細膩且耐用，建立居家美感",
+        specialPrice: 6800,
+        price: 5780,
     },
     {
-        image: "https://res.cloudinary.com/drbhr7kmb/image/upload/v1754286944/default_o4fznm.png",
-        productName: "Google Pixel 6",
+        image: "https://res.cloudinary.com/drbhr7kmb/image/upload/v1754924302/myn9om3c2axfsw5bxju3.png",
+        productName: "MacBook Pro 14",
         description:
-            "The Google Pixel 6 boasts cutting-edge AI features, exceptional photo quality, and a stunning display, making it a perfect choice for Android enthusiasts.",
-        price: 599,
-        specialPrice: 400,
+            "Apple M 系列晶片，結合高效能與長續航，配備 Liquid Retina XDR 顯示器與優異的色彩準確度，無論是創意設計、影像剪輯還是日常工作，都能流暢運行，滿足專業與日常的多元需求",
+        price: 38800,
+        specialPrice: 32980,
     }
 ];
 
@@ -49,7 +49,7 @@ const About = () => {
                 </div>
 
                 <div className="w-full md:w-1/2 mb-6 md:mb-0">
-                    <img src="https://res.cloudinary.com/drbhr7kmb/image/upload/v1754286944/default_o4fznm.png"
+                    <img src="https://res.cloudinary.com/drbhr7kmb/image/upload/v1754923230/uyl8vt1z0ceejyff3wqg.png"
                         alt="About Us"
                         className="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
                     </img>

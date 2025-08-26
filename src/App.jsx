@@ -17,6 +17,7 @@ import { ThemeProvider } from '@mui/material';
 import theme from "./theme"; 
 import LinepayConfirm from './components/checkout/LinePayConfirm';
 import OrderHistory from './components/order/OrderHistory';
+import OrderSuccess from './components/checkout/OrderSuccess';
 
 
 function App() {
@@ -33,12 +34,11 @@ function App() {
           <Route path='/cart' element={<Cart />} />
           <Route path='/linepay/confirm' element={<LinepayConfirm />} />
           <Route path='/orders' element={<OrderHistory/>}/>
-
+        <Route path="/orders/:orderId/success" element={<OrderSuccess />} />
 
           <Route path='/' element={<PrivateRoute />}>
             <Route path='/checkout' element={<Checkout />} />
-            <Route path='/order-confirm' element={<PaymentConfirmation/>} />
-            
+            <Route path='/order-confirm' element={<PaymentConfirmation/>} /> 
           </Route>
 
           <Route path='/' element={<PrivateRoute publicPage />}>

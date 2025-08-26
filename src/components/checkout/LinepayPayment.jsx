@@ -7,7 +7,6 @@ import toast from 'react-hot-toast';
 import linePay from "../../assets/linepay.webp";
 
 const LinepayPayment = () => {
-  const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.carts);
   const { selectedUserCheckoutAddress } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
@@ -20,7 +19,7 @@ const LinepayPayment = () => {
     setLoading(true);
 
     try {
-      // Step 1: 建立訂單
+      // Step 1: 建立預訂單（PENDING）
       const orderItems = cart.map((item) => ({
         product: { productId: item.productId },
         quantity: item.quantity,
@@ -31,16 +30,19 @@ const LinepayPayment = () => {
         orderItems,
       };
 
-      // const orderRes = await api.post("/order/create-for-linepay", orderData);
-      // const orderId = orderRes.data.orderId;
-
       const orderRes = await api.post("/order/create-for-linepay", orderData);
       const order = orderRes.data;
       const orderId = order.orderId;
       const amountFromServer = order.totalAmount;
 
-      localStorage.setItem("LINEPAY_ORDER_ID", orderId); // 👈 確保是純數字
-      localStorage.setItem("LINEPAY_TOTAL_AMOUNT", amountFromServer);
+      // 存起必要資訊
+      localStorage.setItem("LINEPAY_ORDER_ID", String(orderId));
+      localStorage.setItem("LINEPAY_TOTAL_AMOUNT", String(amountFromServer));
+      localStorage.setItem("LINEPAY_ADDRESS_ID", String(selectedUserCheckoutAddress.addressId));
+
+      // ✅ 這行是你少的：把 confirmUrl 宣告出來（建議夾帶 orderId）
+      const origin = import.meta.env.VITE_FRONT_END_URL || window.location.origin;
+     const confirmUrl = `${origin}/linepay/confirm?orderId=${orderId}&amount=${amountFromServer}`;
 
       // Step 2: 呼叫 Line Pay reserve
       const reserveBody = {
@@ -48,22 +50,30 @@ const LinepayPayment = () => {
         currency: "TWD",
         orderId: orderId,
         productName: "Your Order",
-        confirmUrl: `${import.meta.env.VITE_FRONT_END_URL}/linepay/confirm`,
-        cancelUrl: `${import.meta.env.VITE_FRONT_END_URL}/linepay/cancel`,
+        confirmUrl, // ← 這裡才有變數可用
+        cancelUrl: `${origin}/linepay/cancel`,
       };
 
       const reserveRes = await api.post("/order/linepay-reserve", reserveBody);
 
-      if (reserveRes.data) {
-        // Step 3: 導向 Line Pay 頁面
-        window.location.href = reserveRes.data;
+      // 多一層防呆：確定真的拿到 URL 字串
+      const paymentUrl = typeof reserveRes.data === "string" ? reserveRes.data : null;
+      if (paymentUrl && /^https?:\/\//.test(paymentUrl)) {
+        window.location.href = paymentUrl; // Step 3: 導向 Line Pay 頁面
       } else {
+        console.error("Unexpected reserve response:", reserveRes.data);
         toast.error("LinePay failed to return URL.");
       }
 
     } catch (err) {
-      console.error(err);
-      toast.error("LinePay failed. Please try again.");
+      // 改善除錯：把後端訊息印出來
+      const msg =
+        err?.response?.data?.message ||
+        err?.response?.data ||
+        err?.message ||
+        "LinePay failed. Please try again.";
+      console.error("LinePay reserve error:", err?.response || err);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

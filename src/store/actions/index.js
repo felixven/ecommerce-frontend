@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
-import api from "../../api/api"; import { Elements } from '@stripe/react-stripe-js';
+import api from "../../api/api"; 
+import { Elements } from '@stripe/react-stripe-js';
 
 export const fetchProducts = (queryString) => async (dispatch) => {
     try {
@@ -302,30 +303,76 @@ export const createStripePaymentSecret
         }
     };
 
-export const stripePaymentConfirmation
-    = (sendData, setErrorMesssage, setLoadng, toast) => async (dispatch, getState) => {
-        try {
-            const response = await api.post("/order/users/payments/online", sendData);
-            if (response.data) {
-                localStorage.removeItem("CHECKOUT_ADDRESS");
-                localStorage.removeItem("cartItems");
-                localStorage.removeItem("client-secret");
-                dispatch({ type: "REMOVE_CLIENT_SECRET_ADDRESS" });
-                dispatch({ type: "CLEAR_CART" });
-                toast.success("訂單已接受");
-            } else {
-                setErrorMesssage("付款失敗，請重新付款");
-            }
-        } catch (error) {
-            setErrorMesssage("付款失敗，請重新付款");
-        }
-    };
+
+export const stripePaymentConfirmation = (
+    sendData,
+    setErrorMessage,  // ✅ 修正命名
+    setLoading,       // ✅ 修正命名（如果你要用 loading 狀態）
+    toast
+) => async (dispatch) => {
+    try {
+        // （可選）若要顯示 loading
+        setLoading?.(true);
+
+        // ✅ 修正：打到正確的統一入口（和後端對上）
+        // 你若後端要求小寫 /payments/stripe，也可換成那個
+        const { data: order } = await api.post("/order/users/payments/CARD", {
+            ...sendData,
+            pgName: "stripe",           // 建議統一小寫
+            pgStatus: sendData.pgStatus || "succeeded",
+            pgResponseMessage: sendData.pgResponseMessage || "Stripe success",
+        });
+
+        // 成功後清理
+        localStorage.removeItem("CHECKOUT_ADDRESS");
+        localStorage.removeItem("cartItems");
+        localStorage.removeItem("client-secret");
+        dispatch({ type: "REMOVE_CLIENT_SECRET_ADDRESS" });
+        dispatch({ type: "CLEAR_CART" });
+        toast?.success("訂單已接受");
+
+        // ✅ 關鍵：回傳 order，讓外層可以拿到 orderId 導頁
+        return order;
+    } catch (error) {
+        console.error("stripePaymentConfirmation error:", error);
+        setErrorMessage?.("付款失敗，請重新付款");
+        toast?.error("付款失敗，請重新付款");
+        throw error; // 讓呼叫端可 catch
+    } finally {
+        setLoading?.(false);
+    }
+};
+
+// export const stripePaymentConfirmation
+//     = (sendData, setErrorMesssage, setLoadng, toast) => async (dispatch, getState) => {
+//         try {
+//             const response = await api.post("/order/users/payments/online", sendData);
+//             if (response.data) {
+//                 localStorage.removeItem("CHECKOUT_ADDRESS");
+//                 localStorage.removeItem("cartItems");
+//                 localStorage.removeItem("client-secret");
+//                 dispatch({ type: "REMOVE_CLIENT_SECRET_ADDRESS" });
+//                 dispatch({ type: "CLEAR_CART" });
+//                 toast.success("訂單已接受");
+//             } else {
+//                 setErrorMesssage("付款失敗，請重新付款");
+//             }
+//         } catch (error) {
+//             setErrorMesssage("付款失敗，請重新付款");
+//         }
+//     };
 
 export const createLinepayOrder = (sendData, setLoading, setErrorMessage, navigate) => async (dispatch) => {
     try {
         setLoading(true);
         const res = await api.post("/order/create-for-linepay", sendData);
         const order = res.data;
+
+        localStorage.setItem("LINEPAY_ORDER_ID", String(order.orderId));           // NEW
+        localStorage.setItem("LINEPAY_TOTAL_AMOUNT", String(order.totalAmount));   // NEW
+        localStorage.setItem("LINEPAY_ADDRESS_ID", String(order.addressId || sendData.addressId)); // NEW
+
+
         // 儲存 orderId 給下一步 reserve 用
         dispatch({ type: "SAVE_LINEPAY_ORDER", payload: order });
         navigate("/checkout/linepay/reserve");
@@ -337,36 +384,58 @@ export const createLinepayOrder = (sendData, setLoading, setErrorMessage, naviga
 };
 
 export const linepayPaymentConfirmation =
-    (transactionId, pgName, pgPaymentId, pgStatus, pgResponseMessage, toast, orderId, amount, currency) =>
+    (transactionId, pgName, pgPaymentId, pgStatus, pgResponseMessage, toast, orderIdArg, amountArg, currencyArg) =>
         async (dispatch) => {
             try {
-                const body = {
-                    orderId,
+                // 先用參數，缺的就從 localStorage 補
+                const orderId = Number(orderIdArg ?? localStorage.getItem("LINEPAY_ORDER_ID"));
+                const amount = Number(amountArg ?? localStorage.getItem("LINEPAY_TOTAL_AMOUNT"));
+                const currency = String(currencyArg ?? "TWD");
+                const addressId = Number(localStorage.getItem("LINEPAY_ADDRESS_ID")); // 由 createLinepayOrder 存的
+
+                if (!orderId || !amount || !addressId) {
+                    toast.error("缺少必要資訊（orderId/amount/addressId）");
+                    return;
+                }
+
+                // 1) 只做 LINE Pay confirm（不寫 DB）
+                const confirmRes = await api.post(`/order/linepay-confirm/${transactionId}`, {
                     amount,
                     currency,
-                    pgName,
-                    pgPaymentId,
-                    pgStatus,
-                    pgResponseMessage,
-                };
-
-                const res = await api.post(`/order/linepay-confirm/${transactionId}`, body);
-
-                if (res.data) {
-                    localStorage.removeItem("CHECKOUT_ADDRESS");
-                    localStorage.removeItem("cartItems");
-                    dispatch({ type: "CLEAR_CART" });
-                    localStorage.removeItem("LINEPAY_ORDER_ID");
-                    localStorage.removeItem("LINEPAY_TOTAL_AMOUNT");
-                    toast.success("LinePay 付款完成");
-                } else {
-                    toast.error("LinePay 付款失敗");
+                });
+                if (confirmRes.data !== "CONFIRMED") {
+                    toast.error("LinePay 確認失敗");
+                    return;
                 }
+
+                // 2) 統一入口落袋（這一步才會扣庫存/清購物車/寫 Payment/改狀態）
+                const finalizeRes = await api.post(`/order/users/payments/linepay`, {
+                    orderId,
+                    addressId,
+                    pgName: pgName || "linepay",
+                    pgPaymentId: pgPaymentId || transactionId, // 用交易號
+                    pgStatus: pgStatus || "PAID",
+                    pgResponseMessage: pgResponseMessage || "Line Pay confirmed",
+                });
+                const order = finalizeRes.data;
+
+                // 3) 成功後再清理
+                localStorage.removeItem("CHECKOUT_ADDRESS");
+                localStorage.removeItem("cartItems");
+                localStorage.removeItem("LINEPAY_ORDER_ID");
+                localStorage.removeItem("LINEPAY_TOTAL_AMOUNT");
+                localStorage.removeItem("LINEPAY_ADDRESS_ID");
+                dispatch({ type: "CLEAR_CART" });
+
+                toast.success("LinePay 付款完成，訂單已成立");
+                return order; // 需要的話讓呼叫端可拿到 OrderDTO
             } catch (err) {
-                console.error("LinePay confirm error", err);
-                toast.error("LinePay confirm failed.");
+                console.error("LinePay confirm/finalize error", err);
+                toast.error("LinePay 流程失敗，請稍後再試");
+                throw err;
             }
         };
+
 
 export const getUserOrders = () => async (dispatch) => {
     try {
