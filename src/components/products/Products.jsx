@@ -28,7 +28,7 @@ const Products = () => {
         <div className="lg:px-14 sm:px-8 px-4 py-14 2xl:w-[90%] 2xl:mx-auto">
             <Filter categories={categories?categories:[]}/>
             {isLoading ? (
-               <Loader text={"Product Loading"}/>
+               <Loader text={"商品讀取中..."}/>
             ) : errorMessage ? (
                 <div className="flex justify-center items-center h-[200px]">
                 <FaExclamationTriangle className="text-slate-800 text-3xl mr-2"/>

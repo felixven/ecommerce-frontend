@@ -35,7 +35,7 @@ const PaymentForm = ({ clientSecret, totalPrice }) => {
 
     return (
         <form onSubmit={handleSubmit} className='max-w-lg mx-auto p-4'>
-            <h2 className='text-xl font-semibold mb-4'>Payment Information</h2>
+            <h2 className='text-xl font-semibold mb-4'>付款資訊</h2>
             {isLoading ? (
                 <Skeleton />
             ) : (
@@ -48,7 +48,7 @@ const PaymentForm = ({ clientSecret, totalPrice }) => {
                          className='text-white w-full px-5 py-[10px] bg-black mt-2 rounded-md font-bold disabled:opacity-50 disabled:animate-pulse'
                         disabled={!stripe || isLoading}>
                         {!isLoading ? `確定付款 NT$${Number(totalPrice).toFixed(2)}`
-                            : "Processing"}
+                            : "請稍後..."}
                     </button>
                 </>
             )}

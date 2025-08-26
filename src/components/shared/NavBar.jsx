@@ -61,7 +61,7 @@ const NavBar = () => {
                             className={`${path === "/contact" ? "font-semibold" : "hover:font-semibold"}`}
                             to="/contact"
                         >
-                            聯絡客服
+                            聯繫客服
                         </Link>
                     </li>
 
