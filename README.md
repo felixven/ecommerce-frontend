@@ -31,19 +31,32 @@
 
 ### 會員註冊與登入
 具備表單驗證功能
-<br/>
-
-### 商品瀏覽、篩選
-可於首頁瀏覽及選購商品，也可進入商品頁面瀏覽或按商品類型篩選商品
+![Member Register](docs/member-register.png)
 <br/>
 
 ### 商品加入購物車、購物車內容修改
+可於首頁瀏覽及選購商品，也可進入商品頁面瀏覽或按商品類型篩選商品
+![Shopping Add Cart](docs/shopping-addcart-flow.gif)
 <br/>
 
-### 填寫地址、儲存地址、訂單結帳
+### 商品類型篩選器
+![Product Filter](docs/product-filter.gif)
+<br/>
+
+### 填寫訂單收件地址、儲存地址
+![Add Address](docs/add-address.gif)
+<br/>
+
+### 訂單結帳-Line Pay
+![Order Checkout - Line Pay](docs/order-checkout-linepay.gif)
+<br/>
+
+### 訂單結帳-Line Pay
+![Order Checkout - Stripe](docs/order-checkout-stripe.gif)
 <br/>
 
 ### 訂單查詢
+![Order History](docs/order-history.png)
 <br/><br/>
 
 # 建構技術
