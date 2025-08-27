@@ -17,7 +17,7 @@
 # 系統展示
 
 **系統網址**  
-[www.ff.com](http://www.ff.com)
+[電商平台Demo網址](https://ecommerce-frontend-ylwz.vercel.app)
 
 **測試帳號 / 密碼**
 <br>
