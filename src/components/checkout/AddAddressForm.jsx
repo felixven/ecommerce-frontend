@@ -143,7 +143,7 @@ const AddAddressForm = ({ address, setOpenAddressModal }) => {
                         </div>
                     )}
 
-                    {/* 郵遞區號（自動填） */}
+                    {/* 郵遞區號 */}
                     <div className="flex flex-col">
                         <label className="text-sm font-medium text-gray-700">郵遞區號</label>
                         <input

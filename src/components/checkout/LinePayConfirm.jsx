@@ -13,20 +13,15 @@ const LinepayConfirm = () => {
   const transactionId = searchParams.get("transactionId");
   const orderId = Number(searchParams.get("orderId") ?? localStorage.getItem("LINEPAY_ORDER_ID"));
   const amountStr = searchParams.get("amount") ?? localStorage.getItem("LINEPAY_TOTAL_AMOUNT");
-  const amount = amountStr != null ? Number(amountStr) : NaN;  // ⬅︎ 避免 Number(null) 變 0
-
-
-  // [變更] 避免使用變數名 "status"（和 window.status 衝突被標記為 deprecated）
-  const [flowStatus, setFlowStatus] = useState("processing"); // processing | success | error | missing
+  const amount = amountStr != null ? Number(amountStr) : NaN; 
+  const [flowStatus, setFlowStatus] = useState("processing");
 
   useEffect(() => {
     console.log("[LinePayConfirm] txn:", transactionId, "orderId:", orderId, "amount:", amount);
-
-    // 參數檢查放在 IIFE 之前，缺就直接 return，不再往下跑
     const ready = transactionId && Number.isFinite(orderId) && Number.isFinite(amount) && amount > 0;
     if (!ready) {
       setFlowStatus("missing");
-      toast.error("缺少必要參數（transactionId / orderId / amount）");
+      toast.error("缺少了必要內容：（transactionId / orderId / amount）");
       return;
     }
 
@@ -46,8 +41,6 @@ const LinepayConfirm = () => {
             "TWD"
           )
         );
-
-        // 成功：停留在此頁顯示成功訊息（不跳轉）
         setFlowStatus("success");
         navigator(`/orders/${order.orderId}/success`, { replace: true });
 

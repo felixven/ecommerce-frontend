@@ -6,8 +6,8 @@ const PrivateRoute = ({ publicPage = false }) => {
     const { user } = useSelector((state) => state.auth);
     if (publicPage) {
         return user ? <Navigate to="/" /> : <Outlet />
-    }//show the page if user is not log in, otherwise redirect them to profile
-    return user? <Outlet/>: <Navigate to="/login"/>; //private pages, show the page only if the user is log in
+    }
+    return user? <Outlet/>: <Navigate to="/login"/>; 
 }
 
 export default PrivateRoute

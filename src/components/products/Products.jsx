@@ -6,7 +6,6 @@ import { fetchCategories, fetchProducts } from "../../store/actions";
 import Filter from "./Filter";
 import useProductFilter from "../../hooks/useProductFilter";
 import Loader from "../shared/Loader";
-import Pagination from "../shared/Paginations";
 import Paginations from "../shared/Paginations";
 
 const Products = () => {

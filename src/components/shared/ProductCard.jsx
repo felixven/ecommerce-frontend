@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
-import { FaBluesky } from "react-icons/fa6";
 import ProductViewModal from "./ProductViewModal";
 import truncateText from "../../utils/truncateText";
 import { useDispatch } from "react-redux";
@@ -73,14 +72,6 @@ const ProductCard = ({
                         specialPrice,
                     })
                 }}
-                //     className="text-lg font-semibold mb-2 cursor-pointer">
-                //     {truncateText(productName, 50)}
-                // </h2>
-                //   <div className="min-h-20 max-h-20">
-                //     <p className="text-gray-600 text-sm">
-                //         {truncateText(description, 80)}
-                //     </p>
-                // </div>
 
                 className="text-lg font-semibold mb-2 cursor-pointer">
                     {truncateText(productName, 50)}

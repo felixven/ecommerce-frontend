@@ -16,7 +16,7 @@ const NavBar = () => {
     const { user } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        setNavbarOpen(false);     // 路由改變就收合
+        setNavbarOpen(false);
     }, [location.pathname]);
 
     return (
@@ -81,9 +81,9 @@ const NavBar = () => {
                                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                                 sx={{
                                     "& .MuiBadge-badge": {
-                                        backgroundColor: "#000", // 圓圈黑色
-                                        color: "transparent",    // 數字透明（透出底色）
-                                        backdropFilter: "blur(2px)", // 模糊一下底色
+                                        backgroundColor: "#000",
+                                        color: "transparent",
+                                        backdropFilter: "blur(2px)",
                                         WebkitBackdropFilter: "blur(2px)",
                                         fontWeight: "bold",
                                     }

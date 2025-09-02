@@ -7,7 +7,7 @@ const initialState = {
 
 export const authReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "LOGIN_USER"://index.js Line:126 LOGIN_USER
+        case "LOGIN_USER":
             return {
                 ...state,
                 user: {
@@ -18,7 +18,7 @@ export const authReducer = (state = initialState, action) => {
                 token: action.payload.token,
             };
         case "USER_ADDRESS":
-            return { ...state, address: action.payload };//assigning the addresses into the address variablr line:3
+            return { ...state, address: action.payload };
         case "SELECT_CHECKOUT_ADDRESS":
             return { ...state, selectedUserCheckoutAddress: action.payload };
         case "REMOVE_CHECKOUT_ADDRESS":

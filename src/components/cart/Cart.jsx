@@ -15,7 +15,7 @@ const Cart = () => {
 
     useEffect(() => {
         if (products.length === 0) {
-            dispatch(fetchProducts()); // 重新載入 products
+            dispatch(fetchProducts()); 
         }
     }, [products, dispatch]);
 

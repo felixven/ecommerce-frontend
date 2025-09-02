@@ -7,9 +7,7 @@ import { Elements } from '@stripe/react-stripe-js';
 export const fetchProducts = (queryString) => async (dispatch) => {
     try {
         dispatch({ type: "IS_FETCHING" });
-        //console.log("queryString:", queryString);
         const { data } = await api.get(`/public/products?${queryString}`);
-        //?${queryString}
         dispatch({
             type: "FETCH_PRODUCTS",
             payload: data.content,
@@ -60,10 +58,7 @@ export const addToCart = (data, qty = 1, toast) =>
             (item) => item.prodctId === data.prodctId
         );
 
-        //Check for stocks
         const isQuantityExist = getProduct.quantity >= qty;
-
-        // If in stock -> add
         if (isQuantityExist) {
             dispatch({
                 type: "ADD_CART",
@@ -107,8 +102,6 @@ export const addToCart = (data, qty = 1, toast) =>
 
             localStorage.setItem("cartItems", JSON.stringify(getState().carts.cart));
         } else {
-            //if not -> error
-            // error
             toast.error("商品無庫存");
         }
 
@@ -118,7 +111,6 @@ export const addToCart = (data, qty = 1, toast) =>
 export const increaseCartQuantity =
     (data, toast, currentQuantity, setCurrentQuantity) =>
         (dispatch, getState) => {
-            // Find the product
             const { products } = getState().products;
 
             const getProduct = products.find(
@@ -147,7 +139,7 @@ export const decreaseCartQuantity =
         dispatch({
             type: "ADD_CART",
             payload: { ...data, quantity: newQuantity },
-        });//update redux
+        });
         localStorage.setItem("cartItems", JSON.stringify(getState().carts.cart));
     };
 
@@ -158,11 +150,11 @@ export const removeFromCart = (data, toast) => (dispatch, getState) => {
 }
 
 export const authenticateSignInUser
-    = (sendData, toast, reset, navigate, setLoader) => async (dispatch) => {//from Login.jsx line:25
+    = (sendData, toast, reset, navigate, setLoader) => async (dispatch) => {
         try {
-            setLoader(true);//updating the loading state, user is authenticated
-            const { data } = await api.post("/auth/signin", sendData);//對應一下line:7
-            dispatch({ type: "LOGIN_USER", payload: data });//authReducer裡面handle了LOGIN_USER
+            setLoader(true);
+            const { data } = await api.post("/auth/signin", sendData);
+            dispatch({ type: "LOGIN_USER", payload: data });
             localStorage.setItem("auth", JSON.stringify(data));
             reset();
             toast.success("登入成功");
@@ -199,8 +191,6 @@ export const logOutUser = (navigate) => (dispatch) => {
 
 export const addUpdateUserAddress =
     (sendData, toast, addressId, setOpenAddressModal) => async (dispatch, getState) => {
-
-        //const { user } = getState().auth;
         dispatch({ type: "BUTTON_LOADER" });
         try {
             if (!addressId) {
@@ -280,7 +270,6 @@ export const addPaymentMethod = (method) => {
 export const createUserCart = (sendCartItems) => async (dispatch, getState) => {
     try {
         dispatch({ type: "IS_FETCHING" });
-        //console.log("sendCartItems:", sendCartItems);
         await api.post('/cart/create', sendCartItems);
         await dispatch(getUserCart());
     } catch (error) {
@@ -317,18 +306,12 @@ export const getUserCart = () => async (dispatch, getState) => {
 
 export const createStripePaymentSecret
     = (totalPrice) => async (dispatch, getState) => {
-        // try {
-        //     dispatch({ type: "IS_FETCHING" });
-        //     const { data } = await api.post("/order/stripe-client-secret", {
-        //         "amount": Number(totalPrice) * 100,
-        //         "currency": "usd"
-        //     });
         try {
             dispatch({ type: "IS_FETCHING" });
-            const amountInCents = Math.round(Number(totalPrice) * 100); // 元→分，四捨五入保險
+            const amountInCents = Math.round(Number(totalPrice) * 100); 
 
             const { data } = await api.post("/order/stripe-client-secret", {
-                amount: amountInCents,   // 例如 NT$300 => 30000
+                amount: amountInCents,  
                 currency: "twd", 
             });
             dispatch({ type: "CLIENT_SECRET", payload: data });
@@ -343,61 +326,36 @@ export const createStripePaymentSecret
 
 export const stripePaymentConfirmation = (
     sendData,
-    setErrorMessage,  // ✅ 修正命名
-    setLoading,       // ✅ 修正命名（如果你要用 loading 狀態）
+    setErrorMessage,  
+    setLoading, 
     toast
 ) => async (dispatch) => {
     try {
-        // （可選）若要顯示 loading
         setLoading?.(true);
-
-        // ✅ 修正：打到正確的統一入口（和後端對上）
-        // 你若後端要求小寫 /payments/stripe，也可換成那個
         const { data: order } = await api.post("/order/users/payments/CARD", {
             ...sendData,
-            pgName: "stripe",           // 建議統一小寫
+            pgName: "stripe",           
             pgStatus: sendData.pgStatus || "succeeded",
             pgResponseMessage: sendData.pgResponseMessage || "Stripe success",
         });
 
-        // 成功後清理
         localStorage.removeItem("CHECKOUT_ADDRESS");
         localStorage.removeItem("cartItems");
         localStorage.removeItem("client-secret");
         dispatch({ type: "REMOVE_CLIENT_SECRET_ADDRESS" });
         dispatch({ type: "CLEAR_CART" });
         toast?.success("訂單已接受");
-
-        // ✅ 關鍵：回傳 order，讓外層可以拿到 orderId 導頁
         return order;
     } catch (error) {
         console.error("stripePaymentConfirmation error:", error);
         setErrorMessage?.("付款失敗，請重新付款");
         toast?.error("付款失敗，請重新付款");
-        throw error; // 讓呼叫端可 catch
+        throw error; 
     } finally {
         setLoading?.(false);
     }
 };
 
-// export const stripePaymentConfirmation
-//     = (sendData, setErrorMesssage, setLoadng, toast) => async (dispatch, getState) => {
-//         try {
-//             const response = await api.post("/order/users/payments/online", sendData);
-//             if (response.data) {
-//                 localStorage.removeItem("CHECKOUT_ADDRESS");
-//                 localStorage.removeItem("cartItems");
-//                 localStorage.removeItem("client-secret");
-//                 dispatch({ type: "REMOVE_CLIENT_SECRET_ADDRESS" });
-//                 dispatch({ type: "CLEAR_CART" });
-//                 toast.success("訂單已接受");
-//             } else {
-//                 setErrorMesssage("付款失敗，請重新付款");
-//             }
-//         } catch (error) {
-//             setErrorMesssage("付款失敗，請重新付款");
-//         }
-//     };
 
 export const createLinepayOrder = (sendData, setLoading, setErrorMessage, navigate) => async (dispatch) => {
     try {
@@ -405,12 +363,9 @@ export const createLinepayOrder = (sendData, setLoading, setErrorMessage, naviga
         const res = await api.post("/order/create-for-linepay", sendData);
         const order = res.data;
 
-        localStorage.setItem("LINEPAY_ORDER_ID", String(order.orderId));           // NEW
-        localStorage.setItem("LINEPAY_TOTAL_AMOUNT", String(order.totalAmount));   // NEW
-        localStorage.setItem("LINEPAY_ADDRESS_ID", String(order.addressId || sendData.addressId)); // NEW
-
-
-        // 儲存 orderId 給下一步 reserve 用
+        localStorage.setItem("LINEPAY_ORDER_ID", String(order.orderId));       
+        localStorage.setItem("LINEPAY_TOTAL_AMOUNT", String(order.totalAmount));  
+        localStorage.setItem("LINEPAY_ADDRESS_ID", String(order.addressId || sendData.addressId)); 
         dispatch({ type: "SAVE_LINEPAY_ORDER", payload: order });
         navigate("/checkout/linepay/reserve");
     } catch (err) {
@@ -424,18 +379,15 @@ export const linepayPaymentConfirmation =
     (transactionId, pgName, pgPaymentId, pgStatus, pgResponseMessage, toast, orderIdArg, amountArg, currencyArg) =>
         async (dispatch) => {
             try {
-                // 先用參數，缺的就從 localStorage 補
                 const orderId = Number(orderIdArg ?? localStorage.getItem("LINEPAY_ORDER_ID"));
                 const amount = Number(amountArg ?? localStorage.getItem("LINEPAY_TOTAL_AMOUNT"));
                 const currency = String(currencyArg ?? "TWD");
-                const addressId = Number(localStorage.getItem("LINEPAY_ADDRESS_ID")); // 由 createLinepayOrder 存的
+                const addressId = Number(localStorage.getItem("LINEPAY_ADDRESS_ID"));
 
                 if (!orderId || !amount || !addressId) {
                     toast.error("缺少必要資訊（orderId/amount/addressId）");
                     return;
                 }
-
-                // 1) 只做 LINE Pay confirm（不寫 DB）
                 const confirmRes = await api.post(`/order/linepay-confirm/${transactionId}`, {
                     amount,
                     currency,
@@ -444,19 +396,15 @@ export const linepayPaymentConfirmation =
                     toast.error("LinePay 確認失敗");
                     return;
                 }
-
-                // 2) 統一入口落袋（這一步才會扣庫存/清購物車/寫 Payment/改狀態）
                 const finalizeRes = await api.post(`/order/users/payments/linepay`, {
                     orderId,
                     addressId,
                     pgName: pgName || "linepay",
-                    pgPaymentId: pgPaymentId || transactionId, // 用交易號
+                    pgPaymentId: pgPaymentId || transactionId, 
                     pgStatus: pgStatus || "PAID",
                     pgResponseMessage: pgResponseMessage || "Line Pay confirmed",
                 });
                 const order = finalizeRes.data;
-
-                // 3) 成功後再清理
                 localStorage.removeItem("CHECKOUT_ADDRESS");
                 localStorage.removeItem("cartItems");
                 localStorage.removeItem("LINEPAY_ORDER_ID");
@@ -465,7 +413,7 @@ export const linepayPaymentConfirmation =
                 dispatch({ type: "CLEAR_CART" });
 
                 toast.success("LinePay 付款完成，訂單已成立");
-                return order; // 需要的話讓呼叫端可拿到 OrderDTO
+                return order;
             } catch (err) {
                 console.error("LinePay confirm/finalize error", err);
                 toast.error("LinePay 流程失敗，請稍後再試");

@@ -69,7 +69,7 @@ const Filter = ({ categories }) => {
 
     return (
         <div className="flex lg:flex-row flex-col-reverse lg:justify-between justify-center items-center gap-4">
-            {/* SEARCH BAR */}
+            {/* Search Bar */}
             <div className="relative flex items-center 2xl:w-[450px] sm:w-[420px] w-full">
                 <input
                     type="text"
@@ -80,7 +80,7 @@ const Filter = ({ categories }) => {
                  <FiSearch className="absolute left-3 text-slate-800 size={20}"/>
             </div>
 
-            {/* CATEGORY SELECTION */}
+            {/* Category Selection */}
             <div className="flex sm:flex-row flex-col gap-4 items-center">
                  <FormControl
                     className="text-slate-800 border-slate-700"
@@ -103,7 +103,7 @@ const Filter = ({ categories }) => {
                          </Select>
                 </FormControl>
                 
-                 {/* SORT BUTTON & CLEAR FILTER */}
+                 {/* Sort Button & Clear Filter */}
                  <Tooltip title="價格排序">
                  <Button variant="contained" 
                          onClick={toggleSortOrder}

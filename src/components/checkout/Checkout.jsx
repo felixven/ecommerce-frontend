@@ -9,7 +9,6 @@ import PaymentMethod from './PaymentMethod';
 import OrderSummary from './OrderSummary';
 import StripePayment from './StripePayment';
 import LinepayPayment from './LinepayPayment';
-import PaypalPayment from './PaypalPayment';
 
 
 
