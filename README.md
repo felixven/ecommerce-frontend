@@ -1,4 +1,4 @@
-# 電商平台（Ecommerce System）
+# 電商平台（E-commerce System）
 
 # 系統介紹
 本專案為模擬 線上購物商城 的練習專案，採用 前後端分離架構：
@@ -73,8 +73,8 @@
 # 本機安裝
 1. 取得原始碼  
    ```bash
-   git clone https://github.com/yourname/todo-frontend.git
-   cd todo-frontend
+   git clone https://github.com/felixven/ecommerce-frontend.git
+   cd ecommerce-frontend
    ```
 2. 安裝套件
    ```bash
