@@ -29,6 +29,8 @@
 | user1   |user1@example.com     |password1   |
 | guest1  |guest1@gmail.com      |guest1   |
 
+- ** 此 Demo 使用 Render Free Tier，若閒置超過 15 分鐘會休眠，首次訪問需等待伺服器喚醒。**
+
 - 此專案使用 Line Pay Sandbox 模擬付款流程，無實際金流。
 - Stripe付款：
    - 卡號：4242 4242 4242 4242

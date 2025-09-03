@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Banner from "./Banner";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchProducts } from "../../store/actions";
 import ProductCard from "../shared/ProductCard";
 import Loader from "../shared/Loader";
@@ -14,25 +14,34 @@ const Home = () => {
     const { isLoading, errorMessage } = useSelector(
         (state) => state.errors
     );
+
+    const [isFirstLoad, setIsFirstLoad] = useState(true);
+
     useEffect(() => {
-        dispatch(fetchProducts());
+        dispatch(fetchProducts()).finally(() => {
+            setIsFirstLoad(false);
+        });
     }, [dispatch]);
 
     return (
         <>
+
             <Banner />
             <div className="lg:px-14 sm:px-8 px-4">
                 <div className="py-5">
                     <div className="flex flex-col justify-center items-center space-y-2">
                         <h1 className="text-slate-800 text-4xl font-bold"> 嚴選商品</h1>
-                      
+
                         <span className="text-slate-700">
-                        家具、服飾、電器、3C，樣樣都有！
-                    </span>
+                            家具、服飾、電器、3C，樣樣都有！
+                        </span>
                     </div>
 
                     {isLoading ? (
-                        <Loader />
+                        <Loader
+                            firstLoad={isFirstLoad}
+                            text="商品讀取中..."
+                        />
                     ) : errorMessage ? (
                         <div className="flex justify-center items-center h-[200px]">
                             <FaExclamationTriangle className="text-slate-800 text-3xl mr-2" />
