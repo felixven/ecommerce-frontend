@@ -18,7 +18,7 @@
 
 **Demo網址**  
 - https://ecommerce-frontend-ylwz.vercel.app/
-- **此 Demo 使用 Render Free Tier，若閒置超過 15 分鐘會休眠，首次訪問需等待伺服器喚醒。**
+- **此 Demo 使用 Render Free Tier，閒置超過 15 分鐘會休眠，首次運行需等待伺服器喚醒。**
 
 **測試帳號 / 密碼**
 <br>
