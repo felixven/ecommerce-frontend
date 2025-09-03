@@ -3,7 +3,7 @@
 # 系統介紹
 本專案為模擬 線上購物商城 的練習專案，採用 前後端分離架構：
 - 前端：以 React.js + Tailwind CSS 開發，提供使用者網購操作體驗。
-- 後端：以 Spring Boot + MySQL 建立 RESTful API，並支援 JWT 驗證與授權。
+- 後端：以 Spring Boot + MySQL 建立 REST API，並支援 JWT 驗證與授權。
 - 支付串接：支援 Line Pay 與 Stripe，模擬完整線上購物付款流程。
 - 本檔案為 **前端原始碼**，後端原始碼請見：[E-commerce System| 後端原始碼](https://github.com/felixven/ecommerce-backend.git)
 
@@ -29,8 +29,8 @@
 | user1   |user1@example.com     |password1   |
 | guest1  |guest1@gmail.com      |guest1   |
 
--此專案使用 Line Pay Sandbox 模擬付款流程，無實際金流。
--Stripe付款：
+- 此專案使用 Line Pay Sandbox 模擬付款流程，無實際金流。
+- Stripe付款：
    -卡號：4242 4242 4242 4242
    -卡片到期日需晚於當前日期（例如 12/34），驗證碼可輸入任意 3 碼
 
